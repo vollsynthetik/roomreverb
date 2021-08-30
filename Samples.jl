@@ -1,4 +1,4 @@
-export Sample
+export Sample, add
 
 "Represents a single sample."
 struct Sample{T<:Number}
@@ -9,16 +9,19 @@ end
 function add(s1::Array{Sample{T}}, s2::Array{Sample{T}}) where T <: Number
     shorterarray = s1
     longerarray = s2
-    if s1.length > s2.length
+    if size(s1)[1] > size(s2)[1]
         shorterarray = s2
         longerarray = s1
     end
-    resultingarray = Array{Sample{T}}()
-    for index in [1:longerarray.length]
-        if shorterarray.length < index
+    resultingarray = Array{Sample{T},1}()
+    index = 1
+    while index <= size(longerarray)[1]
+        if size(shorterarray)[1] < index
             push!(resultingarray, Sample(longerarray[index]))
         else
-            push!(resultingarray, Sample((shorterarray[index] + longerarray[index]) / 2))
+            push!(resultingarray, Sample((shorterarray[index].value + longerarray[index].value) / 2))
         end
+        index += 1
     end
+    resultingarray
 end
