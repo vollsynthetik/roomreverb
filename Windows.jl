@@ -1,6 +1,6 @@
 export applyblackmanharris
 
-function applyblackmanharris(samples::AbstractArray{Sample})::Array{Sample}
+function applyblackmanharris(samples::Array{Sample})::Array{Sample}
     window::Array{Sample} = []
     for index = 1:length(samples)
        push(window, blackmanharriswindow(samples[index].value, index, length(samples)))
@@ -16,7 +16,7 @@ function blackmanharriswindow(sample::Sample, index::Number, windowsize::Number)
                            ))
 end
 
-function applyhann(samples::AbstractArray{Sample})::Array{Sample}
+function applyhann(samples::Array{Sample})::Array{Sample}
     window::Array{Sample} = []
     for index = 1:length(samples)
        push(window, hannwindow(samples[index].value, index, length(samples)))
@@ -28,7 +28,7 @@ function hannwindow(sample::Sample, index::Number, windowsize::Number)::Sample
     Sample(sample.value * (1/2) * (1 - cos((2*pi*(index-1))/(windowsize-1))))
 end
 
-function applyhamming(samples::AbstractArray{Sample})::Array{Sample}
+function applyhamming(samples::Array{Sample})::Array{Sample}
     window::Array{Sample} = []
     for index = 1:length(samples)
        push(window, hammingwindow(samples[index].value, index, length(samples)))

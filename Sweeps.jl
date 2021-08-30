@@ -9,7 +9,11 @@ struct LinearSweep <: Sweep
     lowestfrequency::Number
     highestfrequency::Number
     amplitude::Number
-    envelope::Method
+    envelope::Any
+    LinearSweep(duration, samplerate, lowestfrequency, highestfrequency, amplitude) =
+        new(duration, samplerate, lowestfrequency, highestfrequency, amplitude, createconstantenvelope(1))
+    LinearSweep(duration, samplerate, lowestfrequency, highestfrequency, amplitude) =
+        new(duration, samplerate, lowestfrequency, highestfrequency, amplitude, envelope)
 end
 
 "Represents a discrete logarithmic sweep."
@@ -19,9 +23,9 @@ struct LogarithmicSweep <: Sweep
     lowestfrequency::Number
     highestfrequency::Number
     amplitude::Number
-    envelope::Method
+    envelope::Any
     LogarithmicSweep(duration, samplerate, lowestfrequency, highestfrequency, amplitude) = 
-        new(duration, samplerate, lowestfrequency, highestfrequency, amplitude, x -> 1)
+        new(duration, samplerate, lowestfrequency, highestfrequency, amplitude, createconstantenvelope(1))
     LogarithmicSweep(duration, samplerate, lowestfrequency, highestfrequency, amplitude, envelope) = 
         new(duration, samplerate, lowestfrequency, highestfrequency, amplitude, envelope)
 end
