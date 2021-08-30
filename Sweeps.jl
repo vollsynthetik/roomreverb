@@ -2,6 +2,7 @@ export Sound, Sweep, SineWave, LinearSweep, LogarithmicSweep, iterate
 
 abstract type Sound end
 abstract type Sweep <: Sound end
+abstract type Noise <: Sound end
 
 "Represents a sine wave at a given frequency"
 struct SineWave <: Sound
@@ -22,6 +23,22 @@ end
 
 "Represents a discrete logarithmic sweep."
 struct LogarithmicSweep <: Sweep
+    duration::Number
+    samplerate::Int
+    lowestfrequency::Number
+    highestfrequency::Number
+    amplitude::Number
+end
+
+struct WhiteNoise <: Noise
+    duration::Number
+    samplerate::Int
+    lowestfrequency::Number
+    highestfrequency::Number
+    amplitude::Number
+end
+
+struct PinkNoise <: Noise
     duration::Number
     samplerate::Int
     lowestfrequency::Number
@@ -52,4 +69,12 @@ function generatesample(sweep::LogarithmicSweep, number::Int)
     phi0 = -((2 * pi * sweep.lowestfrequency * sweep.duration) / (c * log(2)))
     x = number / sweep.samplerate
     Sample(a0 * sin(((2 * pi * sweep.lowestfrequency * sweep.duration) / (c * log(2))) * 2^(c*x / sweep.duration) + phi0))
+end
+
+"Gives a sample at a time for the given white noise definition."
+function generatesample(noise::WhiteNoise, nunmber::Int)
+end
+
+"Gives a sample at a time for the given pink noise definition."
+function generatesample(noise::PinkNoise, nunmber::Int)
 end
