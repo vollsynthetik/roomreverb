@@ -2,6 +2,7 @@ module RoomReverb
 
 include("Sounds.jl")
 include("Samples.jl")
+include("Envelopes.jl")
 
 include("Noise.jl")
 include("Sweeps.jl")

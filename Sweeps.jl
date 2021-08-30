@@ -9,6 +9,7 @@ struct LinearSweep <: Sweep
     lowestfrequency::Number
     highestfrequency::Number
     amplitude::Number
+    envelope::Method
 end
 
 "Represents a discrete logarithmic sweep."
@@ -18,15 +19,24 @@ struct LogarithmicSweep <: Sweep
     lowestfrequency::Number
     highestfrequency::Number
     amplitude::Number
+    envelope::Method
+    LogarithmicSweep(duration, samplerate, lowestfrequency, highestfrequency, amplitude) = 
+        new(duration, samplerate, lowestfrequency, highestfrequency, amplitude, x -> 1)
+    LogarithmicSweep(duration, samplerate, lowestfrequency, highestfrequency, amplitude, envelope) = 
+        new(duration, samplerate, lowestfrequency, highestfrequency, amplitude, envelope)
 end
 
 "Gives a sample at a time for the given sine sweep definition."
-function generatesample(sinewave::LinearSweep, nunmber::Int)
+function generatesample(sweep::LinearSweep, nunmber::Int)
+    a0 = sweep.amplitude * sweep.envelope(number)
+    x = number / sweep.samplerate
+    f = (((sweep.highestfrequency - sweep.lowestfrequency) / (2 * sweep.duration)) * x) + sweep.lowestfrequency
+    Sample(f * 2 * pi * x)
 end
 
 "Gives a sample at a time for the given discrete log sweep definition."
 function generatesample(sweep::LogarithmicSweep, number::Int)
-    a0 = sweep.amplitude
+    a0 = sweep.amplitude * sweep.envelope(number)
     c = log(2, sweep.highestfrequency) - log(2, sweep.lowestfrequency)
     phi0 = -((2 * pi * sweep.lowestfrequency * sweep.duration) / (c * log(2)))
     x = number / sweep.samplerate
