@@ -1,4 +1,4 @@
-export Sound, iterate, play
+export Sound, iterate, play, fft
 
 abstract type Sound end
 
@@ -7,7 +7,8 @@ function Base.iterate(S::Sound, state=1)
     state > S.duration * S.samplerate ? nothing : (generatesample(S, state), state + 1)
 end
 
-function play(Sounds::AbstractArray{T, 1} where T <: Sound, state=1)::Array{Sample{Float64}, 1}
+"Plays all of the given sounds at once."
+function play(Sounds::AbstractArray{T, 1} where T <: Sound)::Array{Sample{Float64}, 1}
     all = Array{Sample{Float64}, 1}()
     for sound in Sounds
         samples = Array{Sample{Float64}, 1}()
@@ -17,4 +18,10 @@ function play(Sounds::AbstractArray{T, 1} where T <: Sound, state=1)::Array{Samp
         all = add(all, samples)
     end
     all
+end
+
+""
+function fft(Sounds::AbstractArray{T, 1} where T <: Sound)::Array{Complex, 1}
+    samples = play(Sounds)
+    fft(value.(samples))
 end
