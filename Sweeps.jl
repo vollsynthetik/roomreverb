@@ -31,7 +31,7 @@ struct LogarithmicSweep <: Sweep
 end
 
 "Gives a sample at a time for the given sine sweep definition."
-function generatesample(sweep::LinearSweep, nunmber::Int)
+function generatesample(sweep::LinearSweep, number::Int)
     a0 = sweep.amplitude * sweep.envelope(number)
     x = number / sweep.samplerate
     f = (((sweep.highestfrequency - sweep.lowestfrequency) / (2 * sweep.duration)) * x) + sweep.lowestfrequency

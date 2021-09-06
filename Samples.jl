@@ -1,7 +1,9 @@
 export Sample, add
 
+abstract type AbstractSample end
+
 "Represents a single sample."
-struct Sample{T<:Number}
+struct Sample{T<:Number} <: AbstractSample
     value::T
 end
 
@@ -17,7 +19,7 @@ function add(s1::Array{Sample{T}}, s2::Array{Sample{T}}) where T <: Number
     index = 1
     while index <= size(longerarray)[1]
         if size(shorterarray)[1] < index
-            push!(resultingarray, Sample(longerarray[index]))
+            push!(resultingarray, Sample(longerarray[index].value))
         else
             push!(resultingarray, Sample((shorterarray[index].value + longerarray[index].value) / 2))
         end
