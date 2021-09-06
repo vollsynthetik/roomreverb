@@ -1,4 +1,6 @@
-export Sound, iterate, play, fft
+export Sound, iterate, play, generatefft
+
+using FFTW
 
 "abstract base type for all sound definitions."
 abstract type Sound end
@@ -22,7 +24,7 @@ function play(Sounds::AbstractArray{T, 1} where T <: Sound)::Array{Sample{Float6
 end
 
 "Generates the complex fft of the given sounds played at once."
-function fft(Sounds::AbstractArray{T, 1} where T <: Sound)::Array{Complex, 1}
+function generatefft(Sounds::AbstractArray{T, 1} where T <: Sound)::Array{Complex, 1}
     samples = play(Sounds)
-    fft(value.(samples))
+    FFTW.fft(value.(samples))
 end
