@@ -1,4 +1,4 @@
-export createconstantenvelope
+export createconstantenvelope,createlinearenvelope
 
 function createconstantenvelope(c::Number) 
     _ -> c
