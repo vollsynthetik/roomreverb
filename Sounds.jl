@@ -10,6 +10,15 @@ function Base.iterate(S::Sound, state=1)
     state > S.duration * S.samplerate ? nothing : (generatesample(S, state), state + 1)
 end
 
+"Plays the given sound definition."
+function play(Sound::Sound)::Array{Sample{Float64},1}
+    samples = Array{Sample{Float64}, 1}()
+    for sample in Sound
+        push!(samples, sample)
+    end
+    samples
+end
+
 "Plays all of the given sounds at once."
 function play(Sounds::AbstractArray{T, 1} where T <: Sound)::Array{Sample{Float64}, 1}
     all = Array{Sample{Float64}, 1}()
@@ -21,6 +30,12 @@ function play(Sounds::AbstractArray{T, 1} where T <: Sound)::Array{Sample{Float6
         all = add(all, samples)
     end
     all
+end
+
+"Generates the complex fft of the given sound."
+function generatefft(Sound::Sound)::Array{Complex, 1}
+    samples = play(Sound)
+    FFTW.fft(value.(samples))
 end
 
 "Generates the complex fft of the given sounds played at once."

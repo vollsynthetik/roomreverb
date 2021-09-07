@@ -12,7 +12,7 @@ struct LinearSweep <: Sweep
     envelope::Any
     LinearSweep(duration, samplerate, lowestfrequency, highestfrequency, amplitude) =
         new(duration, samplerate, lowestfrequency, highestfrequency, amplitude, createconstantenvelope(1))
-    LinearSweep(duration, samplerate, lowestfrequency, highestfrequency, amplitude) =
+    LinearSweep(duration, samplerate, lowestfrequency, highestfrequency, amplitude, envelope) =
         new(duration, samplerate, lowestfrequency, highestfrequency, amplitude, envelope)
 end
 

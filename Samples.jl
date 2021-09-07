@@ -26,7 +26,7 @@ function add(s1::Array{Sample{T}}, s2::Array{Sample{T}}) where T <: Number
         if size(shorterarray)[1] < index
             push!(resultingarray, Sample(longerarray[index].value))
         else
-            push!(resultingarray, Sample((shorterarray[index].value + longerarray[index].value) / 2))
+            push!(resultingarray, Sample(shorterarray[index].value + longerarray[index].value))
         end
         index += 1
     end
