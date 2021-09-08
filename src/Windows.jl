@@ -3,7 +3,7 @@ export applyblackmanharris,applyhann,applyhamming
 function applyblackmanharris(samples::Array{Sample{T},1})::Array{Sample{T},1} where T <: Number
     window::Array{Sample{T},1} = []
     for index = 1:length(samples)
-       push(window, blackmanharriswindow(samples[index].value, index, length(samples)))
+       push!(window, blackmanharriswindow(samples[index], index, length(samples)))
     end
     window
 end
@@ -19,7 +19,7 @@ end
 function applyhann(samples::Array{Sample{T}})::Array{Sample{T},1} where T <: Number
     window::Array{Sample{T},1} = []
     for index = 1:length(samples)
-       push(window, hannwindow(samples[index].value, index, length(samples)))
+       push!(window, hannwindow(samples[index], index, length(samples)))
     end
     window
 end
@@ -31,7 +31,7 @@ end
 function applyhamming(samples::Array{Sample{T},1})::Array{Sample{T},1} where T <: Number
     window::Array{Sample{T},1} = []
     for index = 1:length(samples)
-       push(window, hammingwindow(samples[index].value, index, length(samples)))
+       push!(window, hammingwindow(samples[index], index, length(samples)))
     end
     window
 end
