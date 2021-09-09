@@ -36,8 +36,8 @@ end
 "Gives a sample at a time for the given square wave definition."
 function generatesample(wave::SquareWave, number::Int)
     a0 = wave.amplitude * wave.envelope(number)
-    x = number / wave.samplerate
-    Sample(a0 * sign(sin(2 * pi * wave.frequency * x)))
+    modulo = wave.samplerate / wave.frequency
+    Sample{Float64}(mod(number, modulo) < (modulo * 0.5) ? a0 : -a0)
 end
 
 "Represents a pulse wave for a given frequency."
@@ -46,6 +46,7 @@ struct PulseWave <: Sound
     samplerate::Int
     frequency::Number
     amplitude::Number
+    pulsewidth::Number
     envelope::Any
     PulseWave(duration, samplerate, frequency, amplitude) = 
         new(duration, samplerate, frequency, amplitude, createconstantenvelope(1))
@@ -57,7 +58,7 @@ end
 function generatesample(wave::PulseWave, number::Int)
     a0 = wave.amplitude * wave.envelope(number)
     modulo = wave.samplerate / wave.frequency
-    Sample{Float64}(mod(number, modulo) < (modulo / 2) ? a0 : -a0)
+    Sample{Float64}(mod(number, modulo) < (modulo * wave.pulsewidth) ? a0 : -a0)
 end
 
 "Represents a triangluar wave for a given frequency."
