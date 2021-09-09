@@ -80,7 +80,7 @@ function generatesample(wave::TriangularWave, number::Int)
     modulo = wave.samplerate / wave.frequency
     x = mod(number - 1, modulo)
     m = (2 * a0) / (modulo / 2)
-    Sample{Float64}(rest < (modulo / 2) ? (m*x - a0) : (-m*x + a0))
+    Sample{Float64}(x < (modulo / 2) ? (m*x - a0) : (-m*x + 3 * a0))
 end
 
 "Represents a saw tooth wave for a given frequency."
