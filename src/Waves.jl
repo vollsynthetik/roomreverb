@@ -80,7 +80,7 @@ function generatesample(wave::TriangularWave, number::Int)
     modulo = wave.samplerate / wave.frequency
     rest = mod(number, modulo)
     x = rest / wave.samplerate
-    m = (2 * a0) * (modulo / 2)
+    m = (2 * a0) / (modulo / 2)
     Sample{Float64}(rest < (modulo * 0.5) ? (mx - a0) : (-mx + a0))
 end
 
@@ -98,8 +98,11 @@ struct SawtoothWave <: Sound
 end
 
 "Gives a sample at a time for the given saw tooth wave definition."
-function generatesample(sinewave::SawtoothWave, number::Int)
+function generatesample(wave::SawtoothWave, number::Int)
     a0 = wave.amplitude * wave.envelope(number)
-    x = number / wave.samplerate
-    Sample()
+    modulo = wave.samplerate / wave.frequency
+    rest = mod(number, modulo)
+    x = rest / wave.samplerate
+    m = (2 * a0) / modulo
+    Sample{Float64}(mx - a0)
 end
