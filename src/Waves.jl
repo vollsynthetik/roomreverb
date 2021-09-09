@@ -1,7 +1,9 @@
 export SineWave, SquareWave, PulseWave, TriangularWave, SawtoothWave
 
+abstract type Wave <: Sound end
+
 "Represents a sine wave at a given frequency"
-struct SineWave <: Sound
+struct SineWave <: Wave
     duration::Number
     samplerate::Int
     frequency::Number
@@ -21,7 +23,7 @@ function generatesample(sinewave::SineWave, number::Int)
 end
 
 "Represents a square wave for a given frequency."
-struct SquareWave <: Sound
+struct SquareWave <: Wave
     duration::Number
     samplerate::Int
     frequency::Number
@@ -41,7 +43,7 @@ function generatesample(wave::SquareWave, number::Int)
 end
 
 "Represents a pulse wave for a given frequency."
-struct PulseWave <: Sound
+struct PulseWave <: Wave
     duration::Number
     samplerate::Int
     frequency::Number
@@ -62,7 +64,7 @@ function generatesample(wave::PulseWave, number::Int)
 end
 
 "Represents a triangluar wave for a given frequency."
-struct TriangularWave <: Sound
+struct TriangularWave <: Wave
     duration::Number
     samplerate::Int
     frequency::Number
@@ -84,7 +86,7 @@ function generatesample(wave::TriangularWave, number::Int)
 end
 
 "Represents a saw tooth wave for a given frequency."
-struct SawtoothWave <: Sound
+struct SawtoothWave <: Wave
     duration::Number
     samplerate::Int
     frequency::Number
