@@ -1,4 +1,4 @@
-export SineWave, SquareWave, PulseWave, TriangularWave, SawtoothWave
+export Wave, SineWave, SquareWave, PulseWave, TriangularWave, SawtoothWave
 
 abstract type Wave <: Sound end
 
