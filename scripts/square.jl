@@ -11,8 +11,8 @@ samplingrate = 1024
 
 wave = SquareWave(1, samplingrate, 220, 1)
 samples = play(wave)
-sweepfft = (v -> v / (samplingrate/2)).(abs.(fft(value.(samples))[2:512]))
+squarefft = (v -> v / (samplingrate/2)).(abs.(fft(value.(samples))[2:512]))
 
-writedlm("ffts/squarefft.csv", sweepfft)
+writedlm("ffts/squarefft.csv", squarefft)
 
 println("Done.")
