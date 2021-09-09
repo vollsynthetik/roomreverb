@@ -75,10 +75,13 @@ struct TriangularWave <: Sound
 end
 
 "Gives a sample at a time for the given triangluar wave definition."
-function generatesample(sinewave::TriangularWave, number::Int)
+function generatesample(wave::TriangularWave, number::Int)
     a0 = wave.amplitude * wave.envelope(number)
-    x = number / wave.samplerate
-    Sample()
+    modulo = wave.samplerate / wave.frequency
+    rest = mod(number, modulo)
+    x = rest / wave.samplerate
+    m = (2 * a0) * (modulo / 2)
+    Sample{Float64}(rest < (modulo * 0.5) ? (mx - a0) : (-mx + a0))
 end
 
 "Represents a saw tooth wave for a given frequency."
