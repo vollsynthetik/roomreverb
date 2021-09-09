@@ -100,7 +100,7 @@ end
 function generatesample(wave::SawtoothWave, number::Int)
     a0 = wave.amplitude * wave.envelope(number)
     modulo = wave.samplerate / wave.frequency
-    x = mod(number, modulo)
+    x = mod(number - 1, modulo)
     m = (2 * a0) / modulo
     Sample{Float64}(m*x - a0)
 end
