@@ -46,7 +46,7 @@ end
 function generatewhitenoise(noise::WhiteNoise)::Array{Sample{Float64}, 1}
     fft = zeros(Complex{Float64}, noise.samplerate)
     for frequency in noise.lowestfrequency:noise.highestfrequency
-        value = Complex{Float64}(rand(1)[1] * (noise.samplerate/2), 0)
+        value = Complex{Float64}(noise.amplitude * rand(1)[1] * (noise.samplerate/2), 0)
         fft[frequency + 1] = value
         fft[noise.samplerate - (frequency - 1)] = value
     end
