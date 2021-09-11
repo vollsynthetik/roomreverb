@@ -19,7 +19,7 @@ end
 function generatesample(sinewave::SineWave, number::Int)
     a0 = sinewave.amplitude * sinewave.envelope.f(number)
     x = (number - 1) / sinewave.samplerate
-    Sample(a0 * sin(2 * pi * sinewave.frequency * x))
+    a0 * sin(2 * pi * sinewave.frequency * x)
 end
 
 "Represents a square wave for a given frequency."
@@ -39,7 +39,7 @@ end
 function generatesample(wave::SquareWave, number::Int)
     a0 = wave.amplitude * wave.envelope.f(number)
     modulo = wave.samplerate / wave.frequency
-    Sample{Float64}(mod(number - 1, modulo) < (modulo * 0.5) ? a0 : -a0)
+    mod(number - 1, modulo) < (modulo * 0.5) ? a0 : -a0
 end
 
 "Represents a pulse wave for a given frequency."
@@ -60,7 +60,7 @@ end
 function generatesample(wave::PulseWave, number::Int)
     a0 = wave.amplitude * wave.envelope.f(number)
     modulo = wave.samplerate / wave.frequency
-    Sample{Float64}(mod(number - 1, modulo) < (modulo * wave.pulsewidth) ? a0 : -a0)
+    mod(number - 1, modulo) < (modulo * wave.pulsewidth) ? a0 : -a0
 end
 
 "Represents a triangluar wave for a given frequency."
@@ -82,7 +82,7 @@ function generatesample(wave::TriangularWave, number::Int)
     modulo = wave.samplerate / wave.frequency
     x = mod(number - 1, modulo)
     m = (2 * a0) / (modulo / 2)
-    Sample{Float64}(x < (modulo / 2) ? (m*x - a0) : (-m*x + 3 * a0))
+    x < (modulo / 2) ? (m*x - a0) : (-m*x + 3 * a0)
 end
 
 "Represents a saw tooth wave for a given frequency."
@@ -104,5 +104,5 @@ function generatesample(wave::SawtoothWave, number::Int)
     modulo = wave.samplerate / wave.frequency
     x = mod(number - 1, modulo)
     m = (2 * a0) / modulo
-    Sample{Float64}(m*x - a0)
+    m*x - a0
 end

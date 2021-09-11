@@ -11,7 +11,7 @@ samplingrate = 32768
 
 wave = PulseWave(1, samplingrate, 220, 1, 0.3)
 samples = play(wave)
-pulsefft = (v -> v / (samplingrate/2)).(abs.(fft(value.(samples))[2:16384]))
+pulsefft = (v -> v / (samplingrate/2)).(abs.(fft(samples)[2:16384]))
 
 writedlm("ffts/pulsefft.csv", pulsefft)
 

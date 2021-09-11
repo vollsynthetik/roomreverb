@@ -14,7 +14,7 @@ for i in 1:10
 end
 
 samples = play(sounds)
-sinesfft = (v -> v / (samplingrate/2)).(abs.(fft(value.(samples))[2:1024]))
+sinesfft = (v -> v / (samplingrate/2)).(abs.(fft(samples)[2:1024]))
 
 writedlm("ffts/sinesfft.csv", sinesfft)
 

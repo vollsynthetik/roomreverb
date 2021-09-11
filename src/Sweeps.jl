@@ -9,9 +9,9 @@ struct LinearSweep <: Sweep
     lowestfrequency::Number
     highestfrequency::Number
     amplitude::Number
-    envelope::Any
+    envelope::Envelope
     LinearSweep(duration, samplerate, lowestfrequency, highestfrequency, amplitude) =
-        new(duration, samplerate, lowestfrequency, highestfrequency, amplitude, createconstantenvelope(1))
+        new(duration, samplerate, lowestfrequency, highestfrequency, amplitude, ConstantEnvelope(1))
     LinearSweep(duration, samplerate, lowestfrequency, highestfrequency, amplitude, envelope) =
         new(duration, samplerate, lowestfrequency, highestfrequency, amplitude, envelope)
 end
@@ -23,9 +23,9 @@ struct LogarithmicSweep <: Sweep
     lowestfrequency::Number
     highestfrequency::Number
     amplitude::Number
-    envelope::Any
+    envelope::Envelope
     LogarithmicSweep(duration, samplerate, lowestfrequency, highestfrequency, amplitude) = 
-        new(duration, samplerate, lowestfrequency, highestfrequency, amplitude, createconstantenvelope(1))
+        new(duration, samplerate, lowestfrequency, highestfrequency, amplitude, ConstantEnvelope(1))
     LogarithmicSweep(duration, samplerate, lowestfrequency, highestfrequency, amplitude, envelope) = 
         new(duration, samplerate, lowestfrequency, highestfrequency, amplitude, envelope)
 end
@@ -35,7 +35,7 @@ function generatesample(sweep::LinearSweep, number::Int)
     a0 = sweep.amplitude * sweep.envelope(number)
     x = number / sweep.samplerate
     f = (((sweep.highestfrequency - sweep.lowestfrequency) / (2 * sweep.duration)) * x) + sweep.lowestfrequency
-    Sample(f * 2 * pi * x)
+    f * 2 * pi * x
 end
 
 "Gives a sample at a time for the given discrete log sweep definition."
@@ -44,5 +44,5 @@ function generatesample(sweep::LogarithmicSweep, number::Int)
     c = log(2, sweep.highestfrequency) - log(2, sweep.lowestfrequency)
     phi0 = -((2 * pi * sweep.lowestfrequency * sweep.duration) / (c * log(2)))
     x = number / sweep.samplerate
-    Sample(a0 * sin(((2 * pi * sweep.lowestfrequency * sweep.duration) / (c * log(2))) * 2^(c*x / sweep.duration) + phi0))
+    a0 * sin(((2 * pi * sweep.lowestfrequency * sweep.duration) / (c * log(2))) * 2^(c*x / sweep.duration) + phi0)
 end

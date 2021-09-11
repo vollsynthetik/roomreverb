@@ -11,7 +11,7 @@ samplingrate = 32768
 
 wave = SawtoothWave(1, samplingrate, 220, 1)
 samples = play(wave)
-sawtoothfft = (v -> v / (samplingrate/2)).(abs.(fft(value.(samples))[2:16384]))
+sawtoothfft = (v -> v / (samplingrate/2)).(abs.(fft(samples)[2:16384]))
 
 writedlm("ffts/sawtoothfft.csv", sawtoothfft)
 

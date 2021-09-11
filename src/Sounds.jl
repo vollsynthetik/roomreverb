@@ -11,8 +11,8 @@ function Base.iterate(S::Sound, state=1)
 end
 
 "Plays the given sound definition."
-function play(Sound::Sound)::Array{Sample{Float64},1}
-    samples = Array{Sample{Float64}, 1}()
+function play(Sound::Sound)::Array{Float64, 1}
+    samples = Array{Float64, 1}()
     for sample in Sound
         push!(samples, sample)
     end
@@ -20,14 +20,14 @@ function play(Sound::Sound)::Array{Sample{Float64},1}
 end
 
 "Plays all of the given sounds at once."
-function play(Sounds::AbstractArray{T, 1} where T <: Sound)::Array{Sample{Float64}, 1}
-    all = Array{Sample{Float64}, 1}()
+function play(Sounds::AbstractArray{T, 1} where T <: Sound)::Array{Float64, 1}
+    all = Array{Float64, 1}()
     for sound in Sounds
-        samples = Array{Sample{Float64}, 1}()
+        samples = Array{Float64, 1}()
         for sample in sound
             push!(samples, sample)
         end
-        all = add(all, samples)
+        all = all .+ samples
     end
     all
 end

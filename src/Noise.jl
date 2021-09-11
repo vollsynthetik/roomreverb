@@ -11,9 +11,9 @@ mutable struct WhiteNoise <: Noise
     lowestfrequency::Number
     highestfrequency::Number
     amplitude::Number
-    buffer::Array{Sample{Float64}, 1}
+    buffer::Array{Float64, 1}
     WhiteNoise(duration, samplerate, lowestfrequency, highestfrequency, amplitude) =
-        new(duration, samplerate, lowestfrequency, highestfrequency, amplitude, Array{Sample{Float64},1}())
+        new(duration, samplerate, lowestfrequency, highestfrequency, amplitude, Array{Float64, 1}())
 end
 
 "Represents a discrete pink noise."
@@ -23,9 +23,9 @@ mutable struct PinkNoise <: Noise
     lowestfrequency::Number
     highestfrequency::Number
     amplitude::Number
-    buffer::Array{Sample{Float64}, 1}
+    buffer::Array{Float64, 1}
     PinkNoise(duration, samplerate, lowestfrequency, highestfrequency, amplitude) =
-        new(duration, samplerate, lowestfrequency, highestfrequency, amplitude, Array{Sample{Float64},1}())
+        new(duration, samplerate, lowestfrequency, highestfrequency, amplitude, Array{Float64, 1}())
 end
 
 "Represents a discrete brown noise."
@@ -35,9 +35,9 @@ mutable struct BrownNoise <: Noise
     lowestfrequency::Number
     highestfrequency::Number
     amplitude::Number
-    buffer::Array{Sample{Float64}, 1}
+    buffer::Array{Float64, 1}
     BrownNoise(duration, samplerate, lowestfrequency, highestfrequency, amplitude) =
-        new(duration, samplerate, lowestfrequency, highestfrequency, amplitude, Array{Sample{Float64},1}())
+        new(duration, samplerate, lowestfrequency, highestfrequency, amplitude, Array{Float64, 1}())
 end
 
 "Gives a sample at a time for the given white noise definition."
@@ -49,7 +49,7 @@ function generatesample(noise::WhiteNoise, number::Int)
 end
 
 "Generates white noise corresponding to the given white noise definiton"
-function generatewhitenoise(noise::WhiteNoise)::Array{Sample{Float64}, 1}
+function generatewhitenoise(noise::WhiteNoise)::Array{Float64, 1}
     fftwidth = noise.samplerate * noise.duration
     fft = zeros(Complex{Float64}, fftwidth)
     lowerBound = noise.lowestfrequency * noise.duration
@@ -59,7 +59,7 @@ function generatewhitenoise(noise::WhiteNoise)::Array{Sample{Float64}, 1}
         fft[frequencyindex + 1] = value
         fft[fftwidth - (frequencyindex - 1)] = value
     end
-    samples = (v -> Sample{Float64}(v)).(real.(ifft(fft)))
+    samples = real.(ifft(fft))
     noise.buffer = samples
 end
 
@@ -72,7 +72,7 @@ function generatesample(noise::PinkNoise, number::Int)
 end
 
 "Generates pink noise corresponding to the given pink noise definiton"
-function generatepinknoise(noise::PinkNoise)::Array{Sample{Float64}, 1}
+function generatepinknoise(noise::PinkNoise)::Array{Float64, 1}
     fftwidth = noise.samplerate * noise.duration
     fft = zeros(Complex{Float64}, fftwidth)
     lowerBound = noise.lowestfrequency * noise.duration
@@ -83,7 +83,7 @@ function generatepinknoise(noise::PinkNoise)::Array{Sample{Float64}, 1}
         fft[frequencyindex + 1] = value
         fft[fftwidth - (frequencyindex - 1)] = value
     end
-    samples = (v -> Sample{Float64}(v)).(real.(ifft(fft)))
+    samples = real.(ifft(fft))
     noise.buffer = samples
 end
 
@@ -96,7 +96,7 @@ function generatesample(noise::BrownNoise, number::Int)
 end
 
 "Generates brown noise corresponding to the given brown noise definiton"
-function generatebrownnoise(noise::BrownNoise)::Array{Sample{Float64}, 1}
+function generatebrownnoise(noise::BrownNoise)::Array{Float64, 1}
     fftwidth = noise.samplerate * noise.duration
     fft = zeros(Complex{Float64}, fftwidth)
     lowerBound = noise.lowestfrequency * noise.duration
@@ -107,6 +107,6 @@ function generatebrownnoise(noise::BrownNoise)::Array{Sample{Float64}, 1}
         fft[frequencyindex + 1] = value
         fft[fftwidth - (frequencyindex - 1)] = value
     end
-    samples = (v -> Sample{Float64}(v)).(real.(ifft(fft)))
+    samples = real.(ifft(fft))
     noise.buffer = samples
 end

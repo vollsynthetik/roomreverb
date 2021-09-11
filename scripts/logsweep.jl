@@ -11,7 +11,7 @@ samplingrate = 1024
 
 sweep = LogarithmicSweep(1, samplingrate, 100, 400, 1)
 samples = play(sweep)
-sweepfft = (v -> v / (samplingrate/2)).(abs.(fft(value.(samples))[2:512]))
+sweepfft = (v -> v / (samplingrate/2)).(abs.(fft(samples)[2:512]))
 
 writedlm("ffts/logsweepfft.csv", sweepfft)
 
