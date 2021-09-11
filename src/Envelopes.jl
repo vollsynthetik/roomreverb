@@ -1,9 +1,20 @@
-export createconstantenvelope,createlinearenvelope
+export Envelope, ConstantEnvelope, LinearEnvelope
 
-function createconstantenvelope(c::Number) 
-    _ -> c
+abstract type Envelope end
+
+"Represents a constant envelope"
+struct ConstantEnvelope <: Envelope
+    c::Number
+    f::Function
+    ConstantEnvelope(c) =
+        new(c, (x -> c))
 end
 
-function createlinearenvelope(m::Number, n::Number)
-    i -> m*i + n
+"Represents a constant envelope"
+struct LinearEnvelope <: Envelope
+    m::Number
+    n::Number
+    f::Function
+    LinearEnvelope(m,n) =
+        new(m, n, (x -> m*x + n))
 end
