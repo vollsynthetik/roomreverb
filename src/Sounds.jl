@@ -23,13 +23,25 @@ end
 function play(Sounds::AbstractArray{T, 1} where T <: Sound)::Array{Float64, 1}
     all = Array{Float64, 1}()
     for sound in Sounds
-        samples = Array{Float64, 1}()
-        for sample in sound
-            push!(samples, sample)
-        end
-        all = all .+ samples
+        all = add(all, sound)
     end
     all
+end
+
+"Adds a sound to the given array of samples from the beginning of the array 'samples'."
+function add(target::AbstractArray{Float64, 1}, sound::Sound)::AbstractArray{Float64, 1}
+    samples = Float64[]
+    for sample in sound
+        push!(samples, sample)
+    end
+    for index in 1:length(samples)
+        if length(target) < index
+            push!(target, samples[index])
+        else
+            target[index] += samples[index]
+        end 
+    end
+    target
 end
 
 "Generates the complex fft of the given sound."
