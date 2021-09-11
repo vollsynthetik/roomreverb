@@ -7,8 +7,9 @@ include("Envelopes.jl")
 include("Windows.jl")
 include("Fades.jl")
 
-include("Noise.jl")
+include("Noises.jl")
 include("Sweeps.jl")
 include("Waves.jl")
+include("Impulses.jl")
 
 end
