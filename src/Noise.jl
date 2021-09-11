@@ -50,15 +50,17 @@ end
 
 "Generates white noise corresponding to the given white noise definiton"
 function generatewhitenoise(noise::WhiteNoise)::Array{Sample{Float64}, 1}
-    fft = zeros(Complex{Float64}, noise.samplerate)
-    for frequency in noise.lowestfrequency:noise.highestfrequency
-        value = Complex{Float64}(noise.amplitude * rand(1)[1] * (noise.samplerate/2), 0)
-        fft[frequency + 1] = value
-        fft[noise.samplerate - (frequency - 1)] = value
+    fftwidth = noise.samplerate * noise.duration
+    fft = zeros(Complex{Float64}, fftwidth)
+    lowerBound = noise.lowestfrequency * noise.duration
+    upperBound = noise.highestfrequency * noise.duration
+    for frequencyindex in lowerBound:upperBound
+        value = Complex{Float64}(noise.amplitude * rand(1)[1] * (fftwidth/2), 0)
+        fft[frequencyindex + 1] = value
+        fft[fftwidth - (frequencyindex - 1)] = value
     end
     samples = (v -> Sample{Float64}(v)).(real.(ifft(fft)))
     noise.buffer = samples
-    samples
 end
 
 "Gives a sample at a time for the given pink noise definition."
@@ -71,16 +73,18 @@ end
 
 "Generates pink noise corresponding to the given pink noise definiton"
 function generatepinknoise(noise::PinkNoise)::Array{Sample{Float64}, 1}
-    fft = zeros(Complex{Float64}, noise.samplerate)
-    for frequency in noise.lowestfrequency:noise.highestfrequency
-        drop = 2^(log(2,noise.lowestfrequency)-log(2,frequency))
-        value = Complex{Float64}(noise.amplitude * drop * rand(1)[1] * (noise.samplerate/2), 0)
-        fft[frequency + 1] = value
-        fft[noise.samplerate - (frequency - 1)] = value
+    fftwidth = noise.samplerate * noise.duration
+    fft = zeros(Complex{Float64}, fftwidth)
+    lowerBound = noise.lowestfrequency * noise.duration
+    upperBound = noise.highestfrequency * noise.duration
+    for frequencyindex in lowerBound:upperBound
+        drop = 2^(log(2, noise.lowestfrequency)-log(2, (frequencyindex / noise.duration)))
+        value = Complex{Float64}(noise.amplitude * drop * rand(1)[1] * (fftwidth/2), 0)
+        fft[frequencyindex + 1] = value
+        fft[fftwidth - (frequencyindex - 1)] = value
     end
     samples = (v -> Sample{Float64}(v)).(real.(ifft(fft)))
     noise.buffer = samples
-    samples
 end
 
 "Gives a sample at a time for the given brown noise definition."
@@ -93,14 +97,16 @@ end
 
 "Generates brown noise corresponding to the given brown noise definiton"
 function generatebrownnoise(noise::BrownNoise)::Array{Sample{Float64}, 1}
-    fft = zeros(Complex{Float64}, noise.samplerate)
-    for frequency in noise.lowestfrequency:noise.highestfrequency
-        drop = 2^(2*log(2,noise.lowestfrequency)-2*log(2,frequency))
-        value = Complex{Float64}(noise.amplitude * drop * rand(1)[1] * (noise.samplerate/2), 0)
-        fft[frequency + 1] = value
-        fft[noise.samplerate - (frequency - 1)] = value
+    fftwidth = noise.samplerate * noise.duration
+    fft = zeros(Complex{Float64}, fftwidth)
+    lowerBound = noise.lowestfrequency * noise.duration
+    upperBound = noise.highestfrequency * noise.duration
+    for frequencyindex in lowerBound:upperBound
+        drop = 2^(2*log(2,noise.lowestfrequency)-2*log(2,(frequencyindex / noise.duration)))
+        value = Complex{Float64}(noise.amplitude * drop * rand(1)[1] * (fftwidth/2), 0)
+        fft[frequencyindex + 1] = value
+        fft[fftwidth - (frequencyindex - 1)] = value
     end
     samples = (v -> Sample{Float64}(v)).(real.(ifft(fft)))
     noise.buffer = samples
-    samples
 end
