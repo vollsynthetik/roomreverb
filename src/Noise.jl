@@ -35,6 +35,9 @@ mutable struct BrownNoise <: Noise
     lowestfrequency::Number
     highestfrequency::Number
     amplitude::Number
+    buffer::Array{Sample{Float64}, 1}
+    BrownNoise(duration, samplerate, lowestfrequency, highestfrequency, amplitude) =
+        new(duration, samplerate, lowestfrequency, highestfrequency, amplitude, Array{Sample{Float64},1}())
 end
 
 "Gives a sample at a time for the given white noise definition."
@@ -82,4 +85,22 @@ end
 
 "Gives a sample at a time for the given brown noise definition."
 function generatesample(noise::BrownNoise, number::Int)
+    if isempty(noise.buffer)
+        generatebrownnoise(noise)
+    end
+    noise.buffer[number]
+end
+
+"Generates brown noise corresponding to the given brown noise definiton"
+function generatebrownnoise(noise::BrownNoise)::Array{Sample{Float64}, 1}
+    fft = zeros(Complex{Float64}, noise.samplerate)
+    for frequency in noise.lowestfrequency:noise.highestfrequency
+        drop = 2^(2*log(2,noise.lowestfrequency)-2*log(2,frequency))
+        value = Complex{Float64}(noise.amplitude * drop * rand(1)[1] * (noise.samplerate/2), 0)
+        fft[frequency + 1] = value
+        fft[noise.samplerate - (frequency - 1)] = value
+    end
+    samples = (v -> Sample{Float64}(v)).(real.(ifft(fft)))
+    noise.buffer = samples
+    samples
 end
