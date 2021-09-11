@@ -32,7 +32,7 @@ end
 
 "Gives a sample at a time for the given sine sweep definition."
 function generatesample(sweep::LinearSweep, number::Int)
-    a0 = sweep.amplitude * sweep.envelope(number)
+    a0 = sweep.amplitude * sweep.envelope.f(number)
     x = number / sweep.samplerate
     f = (((sweep.highestfrequency - sweep.lowestfrequency) / (2 * sweep.duration)) * x) + sweep.lowestfrequency
     f * 2 * pi * x
@@ -40,7 +40,7 @@ end
 
 "Gives a sample at a time for the given discrete log sweep definition."
 function generatesample(sweep::LogarithmicSweep, number::Int)
-    a0 = sweep.amplitude * sweep.envelope(number)
+    a0 = sweep.amplitude * sweep.envelope.f(number)
     c = log(2, sweep.highestfrequency) - log(2, sweep.lowestfrequency)
     phi0 = -((2 * pi * sweep.lowestfrequency * sweep.duration) / (c * log(2)))
     x = number / sweep.samplerate
