@@ -1,4 +1,4 @@
-export Fade, FadeIn, FadeOut, LinFadeIn, LinFadeOut, ExpFadeIn, ExpFadeOut, apply
+export Fade, FadeIn, FadeOut, LinFadeIn, LinFadeOut, ExpFadeIn, ExpFadeOut, apply!
 
 "Represents a fade."
 abstract type Fade end
@@ -23,8 +23,8 @@ struct LinFadeOut <: FadeOut
     duration::Number
     samplerate::Number
     f::Function
-    LinFadeIn(duration, samplerate) =
-        new(duration, samplerate, x -> -(1 / (duration * samplerate)) * x + (duration * samplerate))
+    LinFadeOut(duration, samplerate) =
+        new(duration, samplerate, x -> (-x / (duration * samplerate)) + 1)
 end
 
 "Represents a exponential fade in."
@@ -46,8 +46,8 @@ struct ExpFadeOut <: FadeOut
 end
 
 "Applies the given fade-in to the given samples."
-function apply!(fade::FadeIn, samples::Float64[])::Float64[]
-    fadelength = fade.duration * fade.samplerate
+function apply!(fade::FadeIn, samples::Array{Float64, 1})::Array{Float64, 1}
+    fadelength = ceil(Int64, fade.duration * fade.samplerate)
     for index in 1:fadelength
         samples[index] *= fade.f(index)
     end
@@ -55,12 +55,12 @@ function apply!(fade::FadeIn, samples::Float64[])::Float64[]
 end
 
 "Applies the given fade-out to the given samples."
-function apply!(fade::FadeOut, samples::Float64[])::Float64[]
-    fadelength = fade.duration * fade.samplerate
+function apply!(fade::FadeOut, samples::Array{Float64, 1})::Array{Float64, 1}
+    fadelength = ceil(Int64, fade.duration * fade.samplerate)
     lowerbound = length(samples) - fadelength
     upperbound = length(samples)
-    for index in lowerbound:upperBound
-        samples[index] *= fade.f(index)
+    for index in lowerbound:upperbound
+        samples[index] *= fade.f(index - lowerbound)
     end
     samples
 end
