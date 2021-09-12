@@ -15,7 +15,7 @@ end
 function generatesample(impulse::BellFunctionImpulse, number::Int)::Float64
     epsilon = 1 / (2 * pi * (impulse.samplerate / impulse.samplecount)^2)
     x = (number - 1/2 - (impulse.samplecount / 2)) / (impulse.samplerate / 4)
-    (4 / (sqrt(2 * pi * epsilon))) * exp( - (x^2 / (2 * epsilon)))
+    ((4 / (sqrt(2 * pi * epsilon))) * exp( - (x^2 / (2 * epsilon)))) / impulse.samplerate
 end
 
 "Represents a Dirac Impulse, i.e., one sample with samplerate height."
@@ -27,5 +27,5 @@ end
 
 "Generates exactly a single sample for the given dirac impulse definiton."
 function generatesample(impulse::DiracImpulse, number::Int)::Float64
-    impulse.samplerate
+    1
 end
