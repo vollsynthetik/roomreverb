@@ -7,10 +7,10 @@ using Main.RoomReverb
 
 samplingrate = 2048
 
-sounds = Array{Sound, 1}()
+sounds = Vector{Sound}()
 
 for i in 1:10
-    push!(sounds, SineWave(1,samplingrate,i*100,0.7))
+    push!(sounds, SineWave(1,samplingrate,i*100,-3.))
 end
 
 samples = play(sounds)

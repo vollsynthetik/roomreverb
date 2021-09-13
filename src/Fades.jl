@@ -12,7 +12,7 @@ abstract type FadeOut <: Fade end
 "Represents a linear fade in."
 struct LinFadeIn <: FadeIn
     duration::Number
-    samplerate::Number
+    samplerate::Integer
     f::Function
     LinFadeIn(duration, samplerate) =
         new(duration, samplerate, x -> (1 / (duration * samplerate)) * x)
@@ -21,7 +21,7 @@ end
 "Represents a linear fade out."
 struct LinFadeOut <: FadeOut
     duration::Number
-    samplerate::Number
+    samplerate::Integer
     f::Function
     LinFadeOut(duration, samplerate) =
         new(duration, samplerate, x -> (-x / (duration * samplerate)) + 1)
@@ -30,7 +30,7 @@ end
 "Represents a exponential fade in."
 struct ExpFadeIn <: FadeIn
     duration::Number
-    samplerate::Number
+    samplerate::Integer
     f::Function
     ExpFadeIn(duration, samplerate) =
         new(duration, samplerate, x -> 2 ^ (x / (duration * samplerate)) - 1)
@@ -39,15 +39,15 @@ end
 "Represents a exponential fade out."
 struct ExpFadeOut <: FadeOut
     duration::Number
-    samplerate::Number
+    samplerate::Integer
     f::Function
     ExpFadeOut(duration, samplerate) =
         new(duration, samplerate, x -> 1 - log(2, (x / (duration * samplerate)) + 1))
 end
 
 "Applies the given fade-in to the given samples."
-function apply!(fade::FadeIn, samples::Array{Float64, 1})::Array{Float64, 1}
-    fadelength = ceil(Int64, fade.duration * fade.samplerate)
+function apply!(fade::FadeIn, samples::Vector{T})::Vector{T} where T <: Real
+    fadelength = ceil(Integer, fade.duration * fade.samplerate)
     for index in 1:fadelength
         samples[index] *= fade.f(index)
     end
@@ -55,8 +55,8 @@ function apply!(fade::FadeIn, samples::Array{Float64, 1})::Array{Float64, 1}
 end
 
 "Applies the given fade-out to the given samples."
-function apply!(fade::FadeOut, samples::Array{Float64, 1})::Array{Float64, 1}
-    fadelength = ceil(Int64, fade.duration * fade.samplerate)
+function apply!(fade::FadeOut, samples::Vector{T})::Vector{T} where T <: Real
+    fadelength = ceil(Integer, fade.duration * fade.samplerate)
     lowerbound = length(samples) - fadelength
     upperbound = length(samples)
     for index in lowerbound:upperbound

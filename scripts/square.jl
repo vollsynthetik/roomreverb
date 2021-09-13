@@ -5,11 +5,11 @@ include("../src/RoomReverb.jl")
 
 using Main.RoomReverb
 
-samples = Array{Sample, 1}()
+samples = Vector{Real}()
 
 samplingrate = 1024
 
-wave = SquareWave(1, samplingrate, 220, 1)
+wave = SquareWave(1, samplingrate, 220, 0.)
 samples = play(wave)
 squarefft = (v -> v / (samplingrate/2)).(abs.(fft(samples)[2:512]))
 
