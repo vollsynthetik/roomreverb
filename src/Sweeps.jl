@@ -5,7 +5,7 @@ abstract type Sweep <: Sound end
 "Represents a discrete linear sweep."
 struct LinearSweep <: Sweep
     duration::Number
-    samplerate::Integer
+    samplerate::Unsigned
     lowestfrequency::Number
     highestfrequency::Number
     dBFS::Real
@@ -19,7 +19,7 @@ end
 "Represents a discrete logarithmic sweep."
 struct LogarithmicSweep <: Sweep
     duration::Number
-    samplerate::Integer
+    samplerate::Unsigned
     lowestfrequency::Number
     highestfrequency::Number
     dBFS::Real

@@ -5,7 +5,7 @@ abstract type Wave <: Sound end
 "Represents a sine wave at a given frequency"
 struct SineWave <: Wave
     duration::Number
-    samplerate::Integer
+    samplerate::Unsigned
     frequency::Number
     dBFS::Real
     envelope::Envelope
@@ -25,7 +25,7 @@ end
 "Represents a square wave for a given frequency."
 struct SquareWave <: Wave
     duration::Number
-    samplerate::Integer
+    samplerate::Unsigned
     frequency::Number
     dBFS::Real
     envelope::Envelope
@@ -45,7 +45,7 @@ end
 "Represents a pulse wave for a given frequency."
 struct PulseWave <: Wave
     duration::Number
-    samplerate::Integer
+    samplerate::Unsigned
     frequency::Number
     dBFS::Real
     pulsewidth::Real
@@ -66,7 +66,7 @@ end
 "Represents a triangluar wave for a given frequency."
 struct TriangularWave <: Wave
     duration::Number
-    samplerate::Integer
+    samplerate::Unsigned
     frequency::Number
     dBFS::Real
     envelope::Envelope
@@ -88,7 +88,7 @@ end
 "Represents a saw tooth wave for a given frequency."
 struct SawtoothWave <: Wave
     duration::Number
-    samplerate::Integer
+    samplerate::Unsigned
     frequency::Number
     dBFS::Real
     envelope::Envelope

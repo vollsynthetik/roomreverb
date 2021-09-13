@@ -7,7 +7,7 @@ abstract type Noise <: Sound end
 "Represents a discrete white noise."
 mutable struct WhiteNoise <: Noise
     duration::Number
-    samplerate::Integer
+    samplerate::Unsigned
     lowestfrequency::Number
     highestfrequency::Number
     dBFS::Real
@@ -19,7 +19,7 @@ end
 "Represents a discrete pink noise."
 mutable struct PinkNoise <: Noise
     duration::Number
-    samplerate::Integer
+    samplerate::Unsigned
     lowestfrequency::Number
     highestfrequency::Number
     dBFS::Real
@@ -31,7 +31,7 @@ end
 "Represents a discrete brown noise."
 mutable struct BrownNoise <: Noise
     duration::Number
-    samplerate::Integer
+    samplerate::Unsigned
     lowestfrequency::Number
     highestfrequency::Number
     dBFS::Real

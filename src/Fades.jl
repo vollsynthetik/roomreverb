@@ -12,7 +12,7 @@ abstract type FadeOut <: Fade end
 "Represents a linear fade in."
 struct LinFadeIn <: FadeIn
     duration::Number
-    samplerate::Integer
+    samplerate::Unsigned
     f::Function
     LinFadeIn(duration, samplerate) =
         new(duration, samplerate, x -> (1 / (duration * samplerate)) * x)
@@ -21,7 +21,7 @@ end
 "Represents a linear fade out."
 struct LinFadeOut <: FadeOut
     duration::Number
-    samplerate::Integer
+    samplerate::Unsigned
     f::Function
     LinFadeOut(duration, samplerate) =
         new(duration, samplerate, x -> (-x / (duration * samplerate)) + 1)
@@ -30,7 +30,7 @@ end
 "Represents a exponential fade in."
 struct ExpFadeIn <: FadeIn
     duration::Number
-    samplerate::Integer
+    samplerate::Unsigned
     f::Function
     ExpFadeIn(duration, samplerate) =
         new(duration, samplerate, x -> 2 ^ (x / (duration * samplerate)) - 1)
@@ -39,7 +39,7 @@ end
 "Represents a exponential fade out."
 struct ExpFadeOut <: FadeOut
     duration::Number
-    samplerate::Integer
+    samplerate::Unsigned
     f::Function
     ExpFadeOut(duration, samplerate) =
         new(duration, samplerate, x -> 1 - log(2, (x / (duration * samplerate)) + 1))

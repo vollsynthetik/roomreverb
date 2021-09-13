@@ -6,8 +6,8 @@ abstract type Impulse <: Sound end
 "Represents a Bell function impulse."
 struct BellFunctionImpulse <: Impulse
     duration::Number
-    samplecount::Integer
-    samplerate::Integer
+    samplecount::Unsigned
+    samplerate::Unsigned
     BellFunctionImpulse(samplecount, samplerate) = new(samplecount / samplerate, samplecount, samplerate)
 end
 
@@ -21,7 +21,7 @@ end
 "Represents a Dirac Impulse, i.e., one sample with samplerate height."
 struct DiracImpulse <: Impulse
     duration::Number
-    samplerate::Integer
+    samplerate::Unsigned
     DiracImpulse(samplerate) = new(1 / samplerate, samplerate)
 end
 
