@@ -44,6 +44,7 @@ end
 function generatesample(noise::WhiteNoise, number::Int)
     if isempty(noise.buffer)
         generatewhitenoise(noise)
+        setvolume!(noise.buffer, noise.dBFS)
     end
     noise.buffer[number]
 end
@@ -55,7 +56,7 @@ function generatewhitenoise(noise::WhiteNoise)::Array{Float64, 1}
     lowerBound = noise.lowestfrequency * noise.duration
     upperBound = noise.highestfrequency * noise.duration
     for frequencyindex in lowerBound:upperBound
-        value = Complex{Float64}(dBFS2Float(noise.dBFS) * rand(1)[1] * (fftwidth/2), 0)
+        value = Complex{Float64}(rand(1)[1] * (fftwidth/2), 0)
         fft[frequencyindex + 1] = value
         fft[fftwidth - (frequencyindex - 1)] = value
     end
@@ -67,6 +68,7 @@ end
 function generatesample(noise::PinkNoise, number::Int)
     if isempty(noise.buffer)
         generatepinknoise(noise)
+        setvolume!(noise.buffer, noise.dBFS)
     end
     noise.buffer[number]
 end
@@ -79,7 +81,7 @@ function generatepinknoise(noise::PinkNoise)::Array{Float64, 1}
     upperBound = noise.highestfrequency * noise.duration
     for frequencyindex in lowerBound:upperBound
         drop = 2^(log(2, noise.lowestfrequency)-log(2, (frequencyindex / noise.duration)))
-        value = Complex{Float64}(dBFS2Float(noise.dBFS) * drop * rand(1)[1] * (fftwidth/2), 0)
+        value = Complex{Float64}(drop * rand(1)[1] * (fftwidth/2), 0)
         fft[frequencyindex + 1] = value
         fft[fftwidth - (frequencyindex - 1)] = value
     end
@@ -91,6 +93,7 @@ end
 function generatesample(noise::BrownNoise, number::Int)
     if isempty(noise.buffer)
         generatebrownnoise(noise)
+        setvolume!(noise.buffer, noise.dBFS)
     end
     noise.buffer[number]
 end
@@ -103,7 +106,7 @@ function generatebrownnoise(noise::BrownNoise)::Array{Float64, 1}
     upperBound = noise.highestfrequency * noise.duration
     for frequencyindex in lowerBound:upperBound
         drop = 2^(2*log(2,noise.lowestfrequency)-2*log(2,(frequencyindex / noise.duration)))
-        value = Complex{Float64}(dBFS2Float(noise.dBFS) * drop * rand(1)[1] * (fftwidth/2), 0)
+        value = Complex{Float64}(drop * rand(1)[1] * (fftwidth/2), 0)
         fft[frequencyindex + 1] = value
         fft[fftwidth - (frequencyindex - 1)] = value
     end
