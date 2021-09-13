@@ -55,3 +55,11 @@ function generatefft(Sounds::AbstractArray{T, 1} where T <: Sound)::Array{Comple
     samples = play(Sounds)
     FFTW.fft(value.(samples))
 end
+
+function float2dBFS(value::Float64)::Float64
+    20 * log(10, value)
+end
+
+function dBFS2Float(dbfs::Float64)::Float64
+    10 ^ (dbfs / 20)
+end
