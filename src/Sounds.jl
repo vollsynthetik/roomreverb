@@ -1,4 +1,4 @@
-export Sound, iterate, play, generatefft
+export Sound, iterate, play, generatefft, dBFS2Float, float2dBFS, setvolume!
 
 using FFTW
 
@@ -60,6 +60,12 @@ function float2dBFS(value::Float64)::Float64
     20 * log(10, value)
 end
 
-function dBFS2Float(dbfs::Float64)::Float64
-    10 ^ (dbfs / 20)
+function dBFS2Float(dBFS::Float64)::Float64
+    10 ^ (dBFS / 20)
+end
+
+function setvolume!(samples::Array{Float64, 1}, dBFS::Float64 = 0)
+    volume = dBFS2Float(dBFS)
+    maxofsamples = maximum(abs.(samples))
+    broadcast!((sample -> sample * volume / maxofsamples), samples, samples)
 end
