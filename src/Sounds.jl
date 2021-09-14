@@ -11,7 +11,7 @@ function Base.iterate(S::Sound, state=1)
 end
 
 "Plays the given sound definition."
-function play(Sound::Sound)::Vector{Real}
+function play(Sound::Sound)::Vector{Float64}
     samples = Vector{Real}()
     for sample in Sound
         push!(samples, sample)
@@ -20,8 +20,8 @@ function play(Sound::Sound)::Vector{Real}
 end
 
 "Plays all of the given sounds at once."
-function play(Sounds::AbstractVector{T} where T <: Sound)::Vector{Real}
-    all = Vector{Real}()
+function play(Sounds::AbstractVector{T} where T <: Sound)::Vector{Float64}
+    all = Vector{Float64}()
     for sound in Sounds
         all = add(all, sound)
     end
@@ -29,8 +29,8 @@ function play(Sounds::AbstractVector{T} where T <: Sound)::Vector{Real}
 end
 
 "Adds a sound to the given array of samples from the beginning of the array 'samples'."
-function add(target::AbstractVector{Real}, sound::Sound)::Vector{Real}
-    samples = Real[]
+function add(target::AbstractVector{T} where T <: Real, sound::Sound)::Vector{Float64}
+    samples = Float64[]
     for sample in sound
         push!(samples, sample)
     end
@@ -51,7 +51,7 @@ function generatefft(Sound::Sound)::Vector{Complex}
 end
 
 "Generates the complex fft of the given sounds played at once."
-function generatefft(Sounds::AbstractVector{T} where T <: Sound)::Vecetor{Complex}
+function generatefft(Sounds::AbstractVector{T} where T <: Sound)::Vector{Complex}
     samples = play(Sounds)
     FFTW.fft(value.(samples))
 end
@@ -64,7 +64,7 @@ function dBFS2Float(dBFS::Real)::Real
     10 ^ (dBFS / 20)
 end
 
-function setvolume!(samples::Vector{Real}, dBFS::Real = 0)
+function setvolume!(samples::Vector{T}, dBFS::Real = 0)::Vector{T} where T <: Real
     volume = dBFS2Float(dBFS)
     maxofsamples = maximum(abs.(samples))
     broadcast!((sample -> sample * volume / maxofsamples), samples, samples)

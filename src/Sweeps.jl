@@ -31,7 +31,7 @@ struct LogarithmicSweep <: Sweep
 end
 
 "Gives a sample at a time for the given sine sweep definition."
-function generatesample(sweep::LinearSweep, number::Integer)::Real
+function generatesample(sweep::LinearSweep, number::Integer)::Float64
     a0 = dBFS2Float(sweep.dBFS) * sweep.envelope.f(number)
     x = number / sweep.samplerate
     f = (((sweep.highestfrequency - sweep.lowestfrequency) / (2 * sweep.duration)) * x) + sweep.lowestfrequency
@@ -39,7 +39,7 @@ function generatesample(sweep::LinearSweep, number::Integer)::Real
 end
 
 "Gives a sample at a time for the given discrete log sweep definition."
-function generatesample(sweep::LogarithmicSweep, number::Integer)::Real
+function generatesample(sweep::LogarithmicSweep, number::Integer)::Float64
     a0 = dBFS2Float(sweep.dBFS) * sweep.envelope.f(number)
     c = log(2, sweep.highestfrequency) - log(2, sweep.lowestfrequency)
     phi0 = -((2 * pi * sweep.lowestfrequency * sweep.duration) / (c * log(2)))

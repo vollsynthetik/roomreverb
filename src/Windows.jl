@@ -20,19 +20,19 @@ struct HammingWindow <: Window
     HammingWindow() = new(samples -> applyhamming(samples))
 end
 
-function apply(window::Window, samples::Vector{Real})::Vector{Real}
+function apply(window::Window, samples::Vector{T})::Vector{T} where T <: Real
     window.f(samples)
 end
 
-function applyblackmanharris(samples::Vector{Real})::Vector{Real}
-    window::Vector{Real} = []
+function applyblackmanharris(samples::Vector{T})::Vector{T} where T <: Real
+    window::Vector{T} = []
     for index = 1:length(samples)
        push!(window, blackmanharriswindow(samples[index], index, length(samples)))
     end
     window
 end
 
-function blackmanharriswindow(sample::Real, index::Integer, windowsize::Integer)::Real
+function blackmanharriswindow(sample::T, index::Integer, windowsize::Integer)::T where T <: Real
     sample * (0.35875 - 
               0.48829*cos((2*pi*(index-1))/(windowsize-1)) - 
               0.14128*cos((4*pi*(index-1))/(windowsize-1)) - 
@@ -40,26 +40,26 @@ function blackmanharriswindow(sample::Real, index::Integer, windowsize::Integer)
               )
 end
 
-function applyhann(samples::Vector{Real})::Vector{Real}
-    window::Vector{Real} = []
+function applyhann(samples::Vector{T})::Vector{T} where T <: Real
+    window::Vector{T} = []
     for index = 1:length(samples)
        push!(window, hannwindow(samples[index], index, length(samples)))
     end
     window
 end
 
-function hannwindow(sample::Real, index::Integer, windowsize::Integer)::Real
+function hannwindow(sample::T, index::Integer, windowsize::Integer)::T where T <: Real
     sample * (1/2) * (1 - cos((2*pi*(index-1))/(windowsize-1)))
 end
 
-function applyhamming(samples::Vector{Real})::Vector{Real}
-    window::Vector{Real} = []
+function applyhamming(samples::Vector{T})::Vector{T} where T <: Real
+    window::Vector{T} = []
     for index = 1:length(samples)
        push!(window, hammingwindow(samples[index], index, length(samples)))
     end
     window
 end
 
-function hammingwindow(sample::Real, index::Integer, windowsize::Integer)::Real
+function hammingwindow(sample::T, index::Integer, windowsize::Integer)::T where T <: Real
     sample * (0.54 - 0.46 * cos((2*pi*(index-1))/(windowsize-1)))
 end

@@ -16,7 +16,7 @@ struct SineWave <: Wave
 end
 
 "Gives a sample at a time for the given sine wave definition."
-function generatesample(sinewave::SineWave, number::Integer)::Real
+function generatesample(sinewave::SineWave, number::Integer)::Float64
     a0 = dBFS2Float(sinewave.dBFS) * sinewave.envelope.f(number)
     x = (number - 1) / sinewave.samplerate
     a0 * sin(2 * pi * sinewave.frequency * x)
@@ -36,7 +36,7 @@ struct SquareWave <: Wave
 end
 
 "Gives a sample at a time for the given square wave definition."
-function generatesample(wave::SquareWave, number::Integer)::Real
+function generatesample(wave::SquareWave, number::Integer)::Float64
     a0 = dBFS2Float(wave.dBFS) * wave.envelope.f(number)
     modulo = wave.samplerate / wave.frequency
     mod(number - 1, modulo) < (modulo * 0.5) ? a0 : -a0
@@ -57,7 +57,7 @@ struct PulseWave <: Wave
 end
 
 "Gives a sample at a time for the given pulse wave definition."
-function generatesample(wave::PulseWave, number::Integer)::Real
+function generatesample(wave::PulseWave, number::Integer)::Float64
     a0 = dBFS2Float(wave.dBFS) * wave.envelope.f(number)
     modulo = wave.samplerate / wave.frequency
     mod(number - 1, modulo) < (modulo * wave.pulsewidth) ? a0 : -a0
@@ -77,7 +77,7 @@ struct TriangularWave <: Wave
 end
 
 "Gives a sample at a time for the given triangluar wave definition."
-function generatesample(wave::TriangularWave, number::Integer)::Real
+function generatesample(wave::TriangularWave, number::Integer)::Float64
     a0 = dBFS2Float(wave.dBFS) * wave.envelope.f(number)
     modulo = wave.samplerate / wave.frequency
     x = mod(number - 1, modulo)
@@ -99,7 +99,7 @@ struct SawtoothWave <: Wave
 end
 
 "Gives a sample at a time for the given saw tooth wave definition."
-function generatesample(wave::SawtoothWave, number::Int)::Real
+function generatesample(wave::SawtoothWave, number::Int)::Float64
     a0 = dBFS2Float(wave.dBFS) * wave.envelope.f(number)
     modulo = wave.samplerate / wave.frequency
     x = mod(number - 1, modulo)

@@ -12,7 +12,7 @@ struct BellFunctionImpulse <: Impulse
 end
 
 "Generates a single sample at a time for the given bell function impulse definiton."
-function generatesample(impulse::BellFunctionImpulse, number::Integer)::Real
+function generatesample(impulse::BellFunctionImpulse, number::Integer)::Float64
     epsilon = 1 / (2 * pi * (impulse.samplerate / impulse.samplecount)^2)
     x = (number - 1/2 - (impulse.samplecount / 2)) / (impulse.samplerate / 4)
     ((4 / (sqrt(2 * pi * epsilon))) * exp( - (x^2 / (2 * epsilon)))) / impulse.samplerate
@@ -26,6 +26,6 @@ struct DiracImpulse <: Impulse
 end
 
 "Generates exactly a single sample for the given dirac impulse definiton."
-function generatesample(impulse::DiracImpulse, number::Integer)::Real
+function generatesample(impulse::DiracImpulse, number::Integer)::Float64
     1
 end
