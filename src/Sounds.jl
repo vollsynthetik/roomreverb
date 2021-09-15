@@ -1,4 +1,4 @@
-export Sound, iterate, play, generatefft, dBFS2Float, float2dBFS, setvolume!
+export Sound, iterate, play, generatefft, dBFS2Float, float2dBFS, setvolume!, convertsamplerate
 
 using FFTW
 
@@ -56,16 +56,47 @@ function generatefft(Sounds::AbstractVector{T} where T <: Sound)::Vector{Complex
     FFTW.fft(value.(samples))
 end
 
+"Calculates the dBFS value from the given [-1..-1] range."
 function float2dBFS(value::Real)::Real
     20 * log(10, value)
 end
 
+"Calculates the [-1..1] value from the given dBFS value."
 function dBFS2Float(dBFS::Real)::Real
     10 ^ (dBFS / 20)
 end
 
+"Normalizes the sample vector to the given dBFS range."
 function setvolume!(samples::Vector{T}, dBFS::Real = 0)::Vector{T} where T <: Real
     volume = dBFS2Float(dBFS)
     maxofsamples = maximum(abs.(samples))
     broadcast!((sample -> sample * volume / maxofsamples), samples, samples)
+end
+
+"Converts the given sample vector from source sample rate to target sample rate."
+function convertsamplerate(samples::Vector{T}, sourcesamplerate::Integer, targetsamplerate::Integer)::Vector{T} where T <: Real
+    target = Vector{T}()
+    
+    if length(samples) == 0
+        return target
+    end
+
+    push!(target, samples[1])
+    if length(samples) == 1
+        return target
+    end
+
+    ratio = (sourcesamplerate - 1) / (targetsamplerate - 1)
+    i = 1
+
+    sourcelength = length(samples)
+    while i < sourcelength
+        i += ratio
+        base = floor(Integer, i)
+        between = round(mod(i, base), digits=14)
+        sample = between == 0 ? samples[base] : round((samples[base + 1]-samples[base]) * between + samples[base], digits=13)
+        push!(target, sample)
+    end
+
+    target
 end
