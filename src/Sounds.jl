@@ -81,21 +81,27 @@ function convertsamplerate(samples::Vector{T}, sourcesamplerate::Integer, target
         return target
     end
 
-    push!(target, samples[1])
     if length(samples) == 1
+        push!(target, samples[1])
         return target
     end
 
-    ratio = (sourcesamplerate - 1) / (targetsamplerate - 1)
-    i = 1
+    ratio = sourcesamplerate // targetsamplerate
+    i = 0
 
     sourcelength = length(samples)
     while i < sourcelength
         i += ratio
+
         base = floor(Integer, i)
-        between = round(mod(i, base), digits=14)
-        sample = between == 0 ? samples[base] : round((samples[base + 1]-samples[base]) * between + samples[base], digits=13)
-        push!(target, sample)
+        between = base == 0 ? i : mod(i, base)
+        index = base + 1
+
+        sample = index >= sourcelength ? samples[base] : (samples[index + 1] - samples[index]) * between + samples[index]
+
+        if base <= sourcelength
+            push!(target, sample)
+        end
     end
 
     target
