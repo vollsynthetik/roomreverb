@@ -1,4 +1,4 @@
-export Sound, iterate, play, generatefft, dBFS2Float, float2dBFS, setvolume!, convertsamplerate
+export Sound, iterate, play, generatefft, dBFS2Float, float2dBFS, setvolume!, resample
 
 using FFTW
 
@@ -74,7 +74,7 @@ function setvolume!(samples::Vector{T}, dBFS::Real = 0)::Vector{T} where T <: Re
 end
 
 "Converts the given sample vector from source sample rate to target sample rate."
-function convertsamplerate(samples::Vector{T}, sourcesamplerate::Integer, targetsamplerate::Integer)::Vector{T} where T <: Real
+function resample(samples::Vector{T}, sourcesamplerate::Integer, targetsamplerate::Integer)::Vector{T} where T <: Real
     target = Vector{T}()
     
     if length(samples) == 0
