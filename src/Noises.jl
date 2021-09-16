@@ -52,11 +52,11 @@ end
 "Generates white noise corresponding to the given white noise definiton"
 function generatewhitenoise(noise::WhiteNoise)::Vector{Float64}
     fftwidth = noise.samplerate * noise.duration
-    fft = zeros(Complex{Real}, fftwidth)
+    fft = zeros(Complex{Float64}, fftwidth)
     lowerBound = noise.lowestfrequency * noise.duration
     upperBound = noise.highestfrequency * noise.duration
     for frequencyindex in lowerBound:upperBound
-        value = Complex{Real}(rand(1)[1] * (fftwidth/2), 0)
+        value = Complex{Float64}(rand(1)[1] * (fftwidth/2), 0)
         fft[frequencyindex + 1] = value
         fft[fftwidth - (frequencyindex - 1)] = value
     end
@@ -76,12 +76,12 @@ end
 "Generates pink noise corresponding to the given pink noise definiton"
 function generatepinknoise(noise::PinkNoise)::Vector{Float64}
     fftwidth = noise.samplerate * noise.duration
-    fft = zeros(Complex{Real}, fftwidth)
+    fft = zeros(Complex{Float64}, fftwidth)
     lowerBound = noise.lowestfrequency * noise.duration
     upperBound = noise.highestfrequency * noise.duration
     for frequencyindex in lowerBound:upperBound
         drop = 2^(log(2, noise.lowestfrequency)-log(2, (frequencyindex / noise.duration)))
-        value = Complex{Real}(drop * rand(1)[1] * (fftwidth/2), 0)
+        value = Complex{Float64}(drop * rand(1)[1] * (fftwidth/2), 0)
         fft[frequencyindex + 1] = value
         fft[fftwidth - (frequencyindex - 1)] = value
     end
@@ -101,12 +101,12 @@ end
 "Generates brown noise corresponding to the given brown noise definiton"
 function generatebrownnoise(noise::BrownNoise)::Vector{Float64}
     fftwidth = noise.samplerate * noise.duration
-    fft = zeros(Complex{Real}, fftwidth)
+    fft = zeros(Complex{Float64}, fftwidth)
     lowerBound = noise.lowestfrequency * noise.duration
     upperBound = noise.highestfrequency * noise.duration
     for frequencyindex in lowerBound:upperBound
         drop = 2^(2*log(2,noise.lowestfrequency)-2*log(2,(frequencyindex / noise.duration)))
-        value = Complex{Real}(drop * rand(1)[1] * (fftwidth/2), 0)
+        value = Complex{Float64}(drop * rand(1)[1] * (fftwidth/2), 0)
         fft[frequencyindex + 1] = value
         fft[fftwidth - (frequencyindex - 1)] = value
     end
