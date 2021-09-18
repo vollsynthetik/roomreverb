@@ -74,35 +74,14 @@ function setvolume!(samples::Vector{T}, dBFS::Real = 0)::Vector{T} where T <: Re
 end
 
 "Converts the given sample vector from source sample rate to target sample rate."
-function resample(samples::Vector{T}, sourcesamplerate::Integer, targetsamplerate::Integer)::Vector{T} where T <: Real
-    target = Vector{T}()
-    
-    if length(samples) == 0
-        return target
-    end
+function resample(samples::Vector{T} where T <: Real, sourcesamplerate::Integer, targetsamplerate::Integer)::Vector{Float64}
+    sourceNyquist = div(sourcesamplerate, 2)
+    targetNyquist = div(targetsamplerate, 2)
 
-    if length(samples) == 1
-        push!(target, samples[1])
-        return target
-    end
+    sourcefft = (v -> v / sourceNyquist).(abs.(fft(samples)))
+    targetfft = sourcefft[1:targetNyquist+1]
+    append!(targetfft, reverse(targetfft[2:targetNyquist]))
+    targetfft = (v -> v * targetNyquist).(targetfft)
 
-    ratio = sourcesamplerate // targetsamplerate
-    i = 0
-
-    sourcelength = length(samples)
-    while i < sourcelength
-        i += ratio
-
-        base = floor(Integer, i)
-        between = base == 0 ? i : mod(i, base)
-        index = base + 1
-
-        sample = index >= sourcelength ? samples[base] : (samples[index + 1] - samples[index]) * between + samples[index]
-
-        if base <= sourcelength
-            push!(target, sample)
-        end
-    end
-
-    target
+    real.(ifft(targetfft))
 end
