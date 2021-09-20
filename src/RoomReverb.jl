@@ -12,4 +12,6 @@ include("Sweeps.jl")
 include("Waves.jl")
 include("Impulses.jl")
 
+include("Resampling.jl")
+
 end
